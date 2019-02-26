@@ -1,0 +1,59 @@
+
+# reading the datafile and preprocessing
+soybeandata<-read.csv("F:\\8thsem project r\\agriculture\\Soybean2.csv",head=TRUE,na.strings="",stringsAsFactors = FALSE,sep=",",dec=".")
+soybeandata
+str(soybeandata)
+summary(soybeandata)
+
+soybeandata$date<-as.numeric(soybeandata$date)
+soybeandata$plant.stand<-as.numeric(soybeandata$plant.stand)
+soybeandata$precip<-as.numeric(soybeandata$precip)
+soybeandata$temp<-as.numeric(soybeandata$temp)
+soybeandata$hail<-as.numeric(soybeandata$hail)
+soybeandata$crop.hist<-as.numeric(soybeandata$crop.hist)
+soybeandata$area.dam<-as.numeric(soybeandata$area.dam)
+soybeandata$sever <-as.numeric(soybeandata$sever)
+soybeandata$seed.tmt <-as.numeric(soybeandata$seed.tmt)
+soybeandata$germ<-as.numeric(soybeandata$germ)
+soybeandata$leaves<-as.numeric(soybeandata$leaves)
+soybeandata$leaf.halo<-as.numeric(soybeandata$leaf.halo)
+soybeandata$leaf.marg<-as.numeric(soybeandata$leaf.marg)
+soybeandata$leaf.size<-as.numeric(soybeandata$leaf.size )
+soybeandata$leaf.shread<-as.numeric(soybeandata$leaf.shread )
+soybeandata$leaf.malf<-as.numeric(soybeandata$leaf.malf)
+soybeandata$leaf.mild<-as.numeric(soybeandata$leaf.mild)
+soybeandata$stem<-as.numeric(soybeandata$stem)
+soybeandata$lodging<-as.numeric(soybeandata$lodging)
+soybeandata$stem_cankers<-as.numeric(soybeandata$stem_cankers)
+soybeandata$canker.lesion<-as.numeric(soybeandata$canker.lesion)
+soybeandata$ fruiting.bodies<-as.numeric(soybeandata$ fruiting.bodies)
+soybeandata$ext.decay<-as.numeric(soybeandata$ext.decay)
+soybeandata$mycelium<-as.numeric(soybeandata$mycelium)
+soybeandata$int.discolor<-as.numeric(soybeandata$int.discolor)
+soybeandata$sclerotia<-as.numeric(soybeandata$sclerotia)
+soybeandata$fruit.pods<-as.numeric(soybeandata$fruit.pods)
+soybeandata$fruit.spots<-as.numeric(soybeandata$fruit.spots)
+soybeandata$seed<-as.numeric(soybeandata$seed)
+soybeandata$mold.growth<-as.numeric(soybeandata$mold.growth)
+soybeandata$seed.discolor<-as.numeric(soybeandata$seed.discolor)
+soybeandata$seed.size<-as.numeric(soybeandata$seed.size)
+soybeandata$shriveling<-as.numeric(soybeandata$shriveling)
+soybeandata$roots<-as.numeric(soybeandata$roots)
+soybeandata$plant_growth<-as.numeric(soybeandata$plant_growth)
+
+soybeandata$diseases<-NULL
+
+#soybeandata<-soybeandata[,2:37]
+sum(is.na(soybeandata))
+
+library(DMwR)
+# replace na by wtKnn (scaling True) of the attribute respectively
+soybeanwtknnT<-knnImputation(soybeandata[,-36], k = 10, scale = T, meth = "weighAvg",distData = NULL)
+soybeanwtknnT$plant_growth<-soybeandata$plant_growth
+str(soybeanwtknnT)
+summary(soybeanwtknnT)
+sum(is.na(soybeanwtknnT))
+write.csv(soybeanwtknnT, file = "soybeanwtknn.csv")
+
+# Boxplot elimination
+boxplot(soybeanwtknnT[,1:35])
