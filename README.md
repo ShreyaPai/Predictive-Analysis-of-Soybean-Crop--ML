@@ -1,2 +1,0 @@
-# finalyr
-outliers
